@@ -8,9 +8,21 @@ namespace SocialSecurityNumber
     {
         static void Main(string[] args)
         {
-            Write("Social Security Number (YYMMDD-XXXX): ");
+            string socialSecurityNumber;
 
-            string socialSecurityNumber = ReadLine();
+
+            if (args.Length > 0)
+            {
+                socialSecurityNumber = args[0];
+
+            }
+            else 
+            {
+                Write("Social Security Number (YYMMDD-XXXX): ");
+
+                socialSecurityNumber = ReadLine();
+            }
+
             string gender;
 
             int genderNumber = int.Parse(socialSecurityNumber.Substring(socialSecurityNumber.Length - 2, 1));
