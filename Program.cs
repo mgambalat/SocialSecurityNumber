@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 using static System.Console;
 
 namespace SocialSecurityNumber
 {
     class Program
     {
+       
         static void Main(string[] args)
         {
             string firstName;
@@ -30,7 +33,7 @@ namespace SocialSecurityNumber
                 Console.Write("Lastname: ");
                 lastName = Console.ReadLine();
                     
-                Console.Write("Social Security Number (YYMMDD-XXXX): ");
+                Console.Write("Social Security Number (YYYYMMDD-XXXX): ");
                 socialSecurityNumber = Console.ReadLine();
             }
             Console.Clear();
@@ -43,7 +46,7 @@ namespace SocialSecurityNumber
 
             gender = isFemale ? "Female" : "Male";
 
-            DateTime birthDate = DateTime.ParseExact(socialSecurityNumber.Substring(0, 6), "yyMMdd", CultureInfo.InvariantCulture);
+            DateTime birthDate = DateTime.ParseExact(socialSecurityNumber.Substring(0, 8), "yyyyMMdd", CultureInfo.InvariantCulture);
 
             int age = DateTime.Now.Year - birthDate.Year;
 
@@ -51,18 +54,70 @@ namespace SocialSecurityNumber
             {
                 age--;
             }
-            string generation = "Non-Millennial";
-            bool millennialControll = birthDate.Year >= 1981 && birthDate.Year <=1996 && age <=100;
-            if (millennialControll)
+
+            string generation;
+            const int XennialsBegin = 1977;
+            const int XennialsEnds = 1983;
+            Random random = new Random();
+            int generationDecider = random.Next(1, 3);
+            bool activateXennial = birthDate.Year >= XennialsBegin && birthDate.Year <= XennialsEnds && generationDecider == 1;
+            if (activateXennial)
             {
-                generation = "Millenial";
+                generation = "Xennial";
+            }
+            else 
+            { 
+                const int SilentGenerationEnds = 1945;
+                const int BabyBoomersEnds = 1964;
+                const int GenerationXEnds = 1979;
+                const int MillennialsEnds = 1995;
+                const int GenerationZEnds = 2010;
+
+                switch (birthDate.Year <= SilentGenerationEnds ? "SilentGeneration" :
+                        birthDate.Year <= BabyBoomersEnds ? "Babyboomer" :
+                        birthDate.Year <= GenerationXEnds ? "GenerationX" :
+                        birthDate.Year <= MillennialsEnds ? "Millennial" :
+                        birthDate.Year <= GenerationZEnds ? "GenerationZ" : "GenerationAlpha")
+
+                {
+                    case "SilentGeneration":
+                        generation = "Silent Generation";
+                        break;
+
+                    case "Babyboomer":
+                        generation = "Babyboomer";
+                        break;
+
+                    case "GenerationX":
+                        generation = "GenerationX";
+                        break;
+
+                    case "Millennial":
+                        generation = "Millennial";
+                        break;
+                    case "GenerationZ":
+                        generation = "GenerationZ";
+                        break;
+
+                    default:
+                        generation = "GenerationAlpha";
+                        break;
+
+
+                }
             }
 
-           Console.WriteLine($"{"Name: ", -25}{firstName} {lastName}\n" + 
+            Console.WriteLine($"{"Name: ", -25}{firstName} {lastName}\n" + 
                $"{"Social Security Number:", -25}{socialSecurityNumber}\n" +
                $"{"Gender:", -25}{gender}\n" +
                $"{"Age:", -25}{age}\n" +
                $"{"Generation:", -25}{generation}");
         }
+       
+
+            
+
     }
+
 }
+
