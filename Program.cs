@@ -8,20 +8,32 @@ namespace SocialSecurityNumber
     {
         static void Main(string[] args)
         {
+            string firstName;
+            string lastName;
             string socialSecurityNumber;
-
+            
 
             if (args.Length > 0)
             {
-                socialSecurityNumber = args[0];
+                firstName = args[0];
+                lastName = args[1];
+                socialSecurityNumber = args[2];
 
             }
             else 
             {
-                Write("Social Security Number (YYMMDD-XXXX): ");
+                Console.WriteLine("Please Enter:");
 
-                socialSecurityNumber = ReadLine();
+                Console.Write("Firstname: ");
+                firstName = Console.ReadLine();
+
+                Console.Write("Lastname: ");
+                lastName = Console.ReadLine();
+                    
+                Console.Write("Social Security Number (YYMMDD-XXXX): ");
+                socialSecurityNumber = Console.ReadLine();
             }
+            Console.Clear();
 
             string gender;
 
@@ -39,8 +51,18 @@ namespace SocialSecurityNumber
             {
                 age--;
             }
+            string generation = "Non-Millennial";
+            bool millennialControll = birthDate.Year >= 1981 && birthDate.Year <=1996 && age <=100;
+            if (millennialControll)
+            {
+                generation = "Millenial";
+            }
 
-            WriteLine($"{gender}, {age}");
+           Console.WriteLine($"{"Name: ", -25}{firstName} {lastName}\n" + 
+               $"{"Social Security Number:", -25}{socialSecurityNumber}\n" +
+               $"{"Gender:", -25}{gender}\n" +
+               $"{"Age:", -25}{age}\n" +
+               $"{"Generation:", -25}{generation}");
         }
     }
 }
