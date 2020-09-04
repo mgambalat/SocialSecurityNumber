@@ -102,8 +102,6 @@ namespace SocialSecurityNumber
                     default:
                         generation = "GenerationAlpha";
                         break;
-
-
                 }
             }
 
@@ -113,11 +111,6 @@ namespace SocialSecurityNumber
                $"{"Age:", -25}{age}\n" +
                $"{"Generation:", -25}{generation}");
         }
-       
-
-            
-
     }
-
 }
 
