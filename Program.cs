@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using static System.Console;
 
@@ -55,18 +56,27 @@ namespace SocialSecurityNumber
                 age--;
             }
 
-            string generation;
+            string generation = " ";
             const int XennialsBegin = 1977;
             const int XennialsEnds = 1983;
-            Random random = new Random();
-            int generationDecider = random.Next(1, 3);
-            bool activateXennial = birthDate.Year >= XennialsBegin && birthDate.Year <= XennialsEnds && generationDecider == 1;
+            bool activateXennial = birthDate.Year >= XennialsBegin && birthDate.Year <= XennialsEnds;
+            bool isXennial = false;
             if (activateXennial)
             {
-                generation = "Xennial";
+                Console.WriteLine("Did you play video games as a kid? (Y)es/(N)o");
+                string input = Console.ReadLine();
+                string key = input.ToUpper();
+                bool xennialYes = key == "Y";
+                if (xennialYes)
+                {
+                    generation = "Xennial";
+                    isXennial = true;
+                }
+                
             }
-            else 
-            { 
+            if (isXennial == false)
+            {
+            
                 const int SilentGenerationEnds = 1945;
                 const int BabyBoomersEnds = 1964;
                 const int GenerationXEnds = 1979;
