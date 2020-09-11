@@ -12,50 +12,32 @@ namespace SocialSecurityNumber
        
         static void Main(string[] args)
         {
-            string firstName;
-            string lastName;
-            string socialSecurityNumber;
-            
-
-            if (args.Length > 0)
-            {
-                firstName = args[0];
-                lastName = args[1];
-                socialSecurityNumber = args[2];
-
-            }
-            else 
-            {
-                Console.WriteLine("Please Enter:");
-
-                Console.Write("Firstname: ");
-                firstName = Console.ReadLine();
-
-                Console.Write("Lastname: ");
-                lastName = Console.ReadLine();
-                    
-                Console.Write("Social Security Number (YYYYMMDD-XXXX): ");
-                socialSecurityNumber = Console.ReadLine();
-            }
+            string firstName, lastName, socialSecurityNumber;
+            FetchInputData(args, out firstName, out lastName, out socialSecurityNumber);
             Console.Clear();
 
-            string gender;
+            string gender = GetGender(socialSecurityNumber);
 
-            int genderNumber = int.Parse(socialSecurityNumber.Substring(socialSecurityNumber.Length - 2, 1));
+            int age = CalculateAge(socialSecurityNumber);
 
-            bool isFemale = genderNumber % 2 == 0;
+            DateTime birthDate = CalculateBirthdate(socialSecurityNumber);
 
-            gender = isFemale ? "Female" : "Male";
+            string generation = GetGeneration(birthDate);
 
-            DateTime birthDate = DateTime.ParseExact(socialSecurityNumber.Substring(0, 8), "yyyyMMdd", CultureInfo.InvariantCulture);
+            PrintOut(firstName, lastName, socialSecurityNumber, gender, age, generation);
+        }
 
-            int age = DateTime.Now.Year - birthDate.Year;
+        private static void PrintOut(string firstName, string lastName, string socialSecurityNumber, string gender, int age, string generation)
+        {
+            Console.WriteLine($"{"Name: ",-25}{firstName} {lastName}\n" +
+                           $"{"Social Security Number:",-25}{socialSecurityNumber}\n" +
+                           $"{"Gender:",-25}{gender}\n" +
+                           $"{"Age:",-25}{age}\n" +
+                           $"{"Generation:",-25}{generation}");
+        }
 
-            if ((birthDate.Month > DateTime.Now.Month) || (birthDate.Month == DateTime.Now.Month && birthDate.Day > DateTime.Now.Day))
-            {
-                age--;
-            }
-
+        private static string GetGeneration(DateTime birthDate)
+        {
             string generation = " ";
             const int XennialsBegin = 1977;
             const int XennialsEnds = 1983;
@@ -72,11 +54,11 @@ namespace SocialSecurityNumber
                     generation = "Xennial";
                     isXennial = true;
                 }
-                
+
             }
             if (isXennial == false)
             {
-            
+
                 const int SilentGenerationEnds = 1945;
                 const int BabyBoomersEnds = 1964;
                 const int GenerationXEnds = 1979;
@@ -115,11 +97,58 @@ namespace SocialSecurityNumber
                 }
             }
 
-            Console.WriteLine($"{"Name: ", -25}{firstName} {lastName}\n" + 
-               $"{"Social Security Number:", -25}{socialSecurityNumber}\n" +
-               $"{"Gender:", -25}{gender}\n" +
-               $"{"Age:", -25}{age}\n" +
-               $"{"Generation:", -25}{generation}");
+            return generation;
+        }
+
+        private static void FetchInputData(string[] args, out string firstName, out string lastName, out string socialSecurityNumber)
+        {
+            if (args.Length > 0)
+            {
+                firstName = args[0];
+                lastName = args[1];
+                socialSecurityNumber = args[2];
+
+            }
+            else
+            {
+                Console.WriteLine("Please Enter:");
+
+                Console.Write("Firstname: ");
+                firstName = Console.ReadLine();
+
+                Console.Write("Lastname: ");
+                lastName = Console.ReadLine();
+
+                Console.Write("Social Security Number (YYYYMMDD-XXXX): ");
+                socialSecurityNumber = Console.ReadLine();
+            }
+        }
+
+        private static int CalculateAge(string socialSecurityNumber) 
+         {
+            DateTime birthDate = DateTime.ParseExact(socialSecurityNumber.Substring(0, 8), "yyyyMMdd", CultureInfo.InvariantCulture);
+            int age = DateTime.Now.Year - birthDate.Year;
+
+            if ((birthDate.Month > DateTime.Now.Month) || (birthDate.Month == DateTime.Now.Month && birthDate.Day > DateTime.Now.Day))
+            {
+                age--;
+            }
+            return age;
+         }
+        private static DateTime CalculateBirthdate(string socialSecurityNumber)
+        {
+            DateTime birthDate = DateTime.ParseExact(socialSecurityNumber.Substring(0, 8), "yyyyMMdd", CultureInfo.InvariantCulture);
+            return birthDate;
+        }
+        private static string GetGender(string socialSecurityNumber)
+        {
+            string gender;
+            int genderNumber = int.Parse(socialSecurityNumber.Substring(socialSecurityNumber.Length - 2, 1));
+
+            bool isFemale = genderNumber % 2 == 0;
+
+            gender = isFemale ? "Female" : "Male";
+            return gender;
         }
     }
 }
