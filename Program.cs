@@ -142,13 +142,19 @@ namespace SocialSecurityNumber
         }
         private static string GetGender(string socialSecurityNumber)
         {
-            string gender;
+            Gender gender;
             int genderNumber = int.Parse(socialSecurityNumber.Substring(socialSecurityNumber.Length - 2, 1));
 
             bool isFemale = genderNumber % 2 == 0;
 
-            gender = isFemale ? "Female" : "Male";
-            return gender;
+            gender = isFemale ? Gender.Female : Gender.Male;
+            
+            return gender.ToString();
+        }
+        enum Gender
+        { 
+         Female,
+         Male
         }
     }
 }
